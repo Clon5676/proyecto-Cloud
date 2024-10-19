@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: libraryuser
+      POSTGRES_PASSWORD: librarypass
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgresql://libraryuser:librarypass@database:5432/library
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
