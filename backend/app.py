@@ -22,6 +22,10 @@ class Book(db.Model):
     author = db.Column(db.String(100), nullable=False)
     is_available = db.Column(db.Boolean, default=True)
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/books', methods=['GET'])
 def get_books():
     books = Book.query.all()
